@@ -1,0 +1,205 @@
+:root {
+  background: linear-gradient(
+    to right,
+    #11998e,
+    #38ef7d
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  --text-color-panels: rgb(85, 85, 85);
+  --color-text: rgb(238, 238, 238);
+  --border-radius-containers: 10px;
+  --border-radius-btn: 20px;
+  --border-containers: 2px solid rgba(128, 128, 128, 0.5);
+  --shadow-containers: 2.8px 1.7px 2px -14px rgba(0, 0, 0, 0.02),
+    6.7px 4.1px 4.7px -14px rgba(0, 0, 0, 0.028),
+    12.5px 7.6px 8.9px -14px rgba(0, 0, 0, 0.035),
+    22.3px 13.6px 15.9px -14px rgba(0, 0, 0, 0.042),
+    41.8px 25.5px 29.7px -14px rgba(0, 0, 0, 0.05),
+    100px 61px 71px -14px rgba(0, 0, 0, 0.07);
+
+  /*Abecedary*/
+  --bg-letter: #2961ac75;
+  --bg-abecedary: rgb(250, 250, 250);
+  --border-inputs: 2px solid rgb(97, 97, 97, 0.5);
+  /*Question container*/
+  --bg-question-container: rgba(255, 255, 255);
+  --text-color-question: rgb(48, 48, 48);
+
+  --bg-btn-comfirm: #74ff80;
+  --bg-btn-comfirm-hover: #5ece67;
+
+  --bg-btn-pasapalabra: #f2cd5c;
+  --bg-btn-pasapalabra-hover: #c4a64b;
+}
+html {
+  overflow: auto;
+}
+body {
+  font-family: "Anek Malayalam", sans-serif;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  color: var(--color-text);
+  background: var(--bg-gradient);
+  overflow: hidden;
+}
+.page-beginPlay {
+  position: fixed;
+  width: 100vw;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(128, 128, 128, 0.5);
+}
+.background {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--text-color-panels);
+  width: 30vw;
+  border-radius: var(--border-radius-containers);
+  padding: 16px;
+  background-color: rgb(255, 255, 255);
+}
+.container-instructions {
+  width: 80%;
+  text-align: center;
+}
+#btn-play,
+#btn-replay {
+  cursor: pointer;
+  background-color: #2c6cbf;
+  border-radius: var(--border-radius-btn);
+  padding: 12px;
+  font-size: 20px;
+
+  border: var(--border-inputs);
+  color: white;
+}
+#btn-play,
+#btn-replay:hover {
+  background-color: #27a2d3;
+}
+.page-finish-game {
+  display: none;
+  position: fixed;
+  width: 100vw;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(128, 128, 128, 0.5);
+}
+
+h1 {
+  text-align: center;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.abecedary-container {
+  background: var(--bg-abecedary);
+  border: var(--border-containers);
+  justify-content: center;
+  width: 40vw;
+  padding: 16px;
+  border-radius: var(--border-radius-containers);
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-containers);
+}
+.abecedary {
+  display: flex;
+  justify-content: center;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.abecedary p {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 4px;
+  user-select: none;
+  font-size: 30px;
+  border-radius: 50px;
+  border: 3px solid rgba(0, 0, 0, 0.5);
+  box-shadow: 1px 0px 2px 3px rgba(83, 83, 83, 0.25);
+  font-weight: 400;
+  background-color: var(--bg-letter);
+  color: rgb(214, 214, 214);
+}
+.question-container {
+  background-color: var(--bg-question-container);
+  border-radius: var(--border-radius-containers);
+  width: 30vw;
+  padding: 8px 32px 8px 32px;
+  margin-bottom: 48px;
+  box-shadow: var(--shadow-containers);
+  border: var(--border-containers);
+  color: var(--text-color-question);
+}
+.question-container h2 {
+  text-align: center;
+}
+.question-container p {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 400;
+}
+.form-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid rgba(128, 128, 128, 0.5);
+}
+.form-group input {
+  display: flex;
+}
+
+.btn-confirm {
+  cursor: pointer;
+  background-color: var(--bg-btn-comfirm);
+  font-size: 20px;
+  border: var(--border-inputs);
+  border-radius: var(--border-radius-btn);
+  padding: 16px;
+}
+.btn-confirm:hover {
+  background-color: var(--bg-btn-comfirm-hover);
+}
+.btn-pasapalabra {
+  cursor: pointer;
+  background-color: var(--bg-btn-pasapalabra);
+  font-size: 20px;
+  border: var(--border-inputs);
+  border-radius: var(--border-radius-btn);
+  padding: 16px;
+}
+.btn-pasapalabra:hover {
+  background-color: var(--bg-btn-pasapalabra-hover);
+}
+.input-answer {
+  font-family: "Anek Malayalam", sans-serif;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  border-radius: var(--border-radius-btn);
+  height: 48px;
+  padding-left: 8px;
+  font-size: 20px;
+  border: var(--border-inputs);
+}
+.timer-score-container {
+  display: flex;
+  justify-content: space-between;
+  width: 200px;
+}
+.timer-score-container p {
+  text-align: center;
+  font-size: 20px;
+}
