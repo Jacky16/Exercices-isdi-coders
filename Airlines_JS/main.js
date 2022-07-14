@@ -52,6 +52,9 @@ function showFlights(_flights) {
 }
 function askName() {
   nameOfUser = prompt("Cual es tu nombre?");
+  if (nameOfUser == null) {
+    askName();
+  }
   console.log("Hola " + nameOfUser);
   console.log("------------------------------");
 }
@@ -70,22 +73,12 @@ function askAdmin() {
   }
 }
 function createFlight() {
-  if (flights.length >= 11) {
+  if (flights.length > 15) {
     alert("Solo se pueden añadir 15 vuelos");
     return;
   }
-  const sourceFlight = prompt("Introduce el origen del vuelo");
-  const destinationFlight = prompt("Introduce el destino del vuelo");
-
-  let costFlight = prompt("Introduce el coste del vuelo");
-  while (!Number(costFlight)) {
-    costFlight = prompt("Introduce el coste del vuelo");
-  }
-
-  let scaleFlight = prompt("Introduce si tiene escalas (si/no)");
-  while (scaleFlight !== "si" && scaleFlight !== "no") {
-    scaleFlight = prompt("Introduce si tiene escalas (si/no)");
-  }
+  const { destinationFlight, sourceFlight, costFlight, scaleFlight } =
+    showPricesFlights();
 
   //Añadir vuelo
   const newFlight = {
@@ -93,20 +86,42 @@ function createFlight() {
     to: destinationFlight,
     from: sourceFlight,
     cost: Number(costFlight),
-    scale: scaleFlight == "si" ? true : false,
+    scale: scaleFlight.toLowerCase() == "si" ? true : false,
   };
   flights.push(newFlight);
   alert("Vuelo añadido");
 }
+const showPricesFlights = () => {
+  const sourceFlight = prompt("Introduce el origen del vuelo");
+  const destinationFlight = prompt("Introduce el destino del vuelo");
+
+  let costFlight = prompt("Introduce el coste del vuelo");
+  while (!Number(costFlight)) {
+    console.log("Introduce un numero");
+    costFlight = prompt("Introduce el coste del vuelo");
+  }
+
+  let scaleFlight = prompt("Introduce si tiene escalas (si/no)");
+  while (scaleFlight !== "si" && scaleFlight !== "no") {
+    alert("Escribe 'si o 'no'");
+    scaleFlight = prompt("Introduce si tiene escalas (si/no)");
+  }
+  return { sourceFlight, destinationFlight, costFlight, scaleFlight };
+};
 function deleteFlight() {
+  console.clear();
   showFlights(flights);
   const idFlight = prompt("Introduce el id del vuelo que quieres eliminar");
   const id = Number(idFlight);
-
-  if (id < flights.length && Number.isInteger(id)) {
-    flights = flights.filter((flight) => flight.id != Number(idFlight));
-    console.clear();
-    alert("Vuelo con id " + idFlight + " eliminado");
+  if (Number.isInteger(id)) {
+    const flightToDelele = flights.find((flight) => flight.id === id);
+    if (flightToDelele != null) {
+      flights = flights.filter((flight) => flight.id != flightToDelele.id);
+      console.clear();
+      alert("Vuelo con id " + idFlight + " eliminado");
+    } else {
+      alert("No existe el vuelo con id " + idFlight);
+    }
   } else {
     alert("El id introducido no es valido");
     deleteFlight();
@@ -135,24 +150,26 @@ function askerManager() {
 
 function buyFlight() {
   showFlights(flights);
-  const questionPrice = "Buscar por precio:";
-  let order = prompt(questionPrice);
-  numOrder = Number(order);
-  while (!Number.isInteger(numOrder)) {
-    order = prompt(questionPrice);
+  const questionPrice =
+    "Introduce un precio para separar los vuelos por precio de mayor y menor al precio introducido";
+  let inputPrice = prompt(questionPrice);
+  numOrder = Number.parseFloat(inputPrice);
+  debugger;
+  while (!Number(numOrder) || inputPrice === null) {
+    inputPrice = prompt(questionPrice);
   }
 
   console.clear();
   let flightOrdered = [];
 
-  console.log("Vuelos con Precio menor o igual a " + order + "€");
-  flightOrdered = flights.filter((flight) => flight.cost <= Number(order));
+  console.log("Vuelos con Precio menor o igual a " + numOrder + "€");
+  flightOrdered = flights.filter((flight) => flight.cost <= Number(numOrder));
   showFlights(flightOrdered);
 
   console.log("------------------------------");
 
-  console.log("Vuelos con Precio mayor a " + order + "€");
-  flightOrdered = flights.filter((flight) => flight.cost > Number(order));
+  console.log("Vuelos con Precio mayor a " + numOrder + "€");
+  flightOrdered = flights.filter((flight) => flight.cost > Number(numOrder));
   showFlights(flightOrdered);
 
   let flightToBuy = prompt("Introduce el id del vuelo que quieres comprar");
