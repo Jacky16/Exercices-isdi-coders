@@ -1,20 +1,26 @@
 const bingoCard = [
-  { number: 1, matched: true },
-  { number: 2, matched: false },
-  { number: 3, matched: true },
-  { number: 4, matched: true },
-  { number: 5, matched: true },
+  { number: null, matched: false },
+  { number: null, matched: false },
+  { number: null, matched: false },
+  { number: null, matched: false },
+  { number: null, matched: false },
 
-  //next line
-  { number: 6, matched: true },
-  { number: 7, matched: true },
-  { number: 8, matched: true },
-  { number: 9, matched: true },
-  { number: 10, matched: true },
+  { number: null, matched: false },
+  { number: null, matched: false },
+  { number: null, matched: false },
+  { number: null, matched: false },
+  { number: null, matched: false },
+
+  { number: null, matched: false },
+  { number: null, matched: false },
+  { number: null, matched: false },
+  { number: null, matched: false },
+  { number: null, matched: false },
 ];
+
 let finishGame = false;
 
-function bingo() {
+const bingo = () => {
   const namePlayer = prompt("Como te llamas?");
   console.log(`Bienvenido ${namePlayer}`);
   askRandomCards();
@@ -23,8 +29,8 @@ function bingo() {
     showBingoCard();
     askNewTurn();
   }
-}
-function showBingoCard() {
+};
+const showBingoCard = () => {
   console.clear();
   console.log("Bingo Card");
   for (let i = 0; i < bingoCard.length; i++) {
@@ -33,63 +39,62 @@ function showBingoCard() {
     }
     console.log(bingoCard[i]);
   }
-}
-function askNewTurn() {
-  const randomNumber = getRandomNumber(10);
+};
+const askNewTurn = () => {
+  const randomNumber = getRandomNumber(bingoCard.length);
 
-  const ask = "Quieres seguir jugando? (si/no) el numero random es: ";
+  const ask = "Continuar turno? (confirm/no) |  el numero random es: ";
   let answer = prompt(ask + randomNumber);
 
-  while (answer != "si" && answer != "no") {
+  while (answer != "confirm" && answer != "no") {
     answer = prompt(ask + randomNumber);
   }
-  if (answer == "si") {
-    finishGame = false;
+  if (answer == "confirm") {
     checkNumber(randomNumber);
   } else if (answer == "no") {
     finishGame = true;
   }
-}
-function getRandomNumber(max) {
-  return Math.floor(Math.random() * max) + 1;
-}
-function checkNumber(randomNumber) {
-  let counter = 0;
-  const linesOfOneCard = 5;
-  const totalLines = bingoCard.length - 1;
+};
+
+const checkNumber = (randomNumber) => {
+  //Comprobar lineas
+  let counterLine = 0;
+  let indexsCardsMatched = [];
+
+  bingoCard.forEach((card) => {
+    if (finishGame) return;
+    if (card.number === randomNumber) {
+      card.number = "X";
+    }
+    if (card.number == "X" && !card.matched) {
+      indexsCardsMatched.push(bingoCard.indexOf(card));
+      counterLine++;
+      if (counterLine >= 5) {
+        indexsCardsMatched.forEach((el) => (bingoCard[el].matched = true));
+        checkBingo();
+        if (!finishGame) alert("Linea");
+      }
+    } else {
+      counterLine = 0;
+      indexsCardsMatched = [];
+    }
+  });
+};
+const checkBingo = () => {
+  const totalLines = bingoCard.length;
   let counterTotalLines = 0;
-
-  for (let i = 0; i < bingoCard.length; i++) {
-    checkLines(i, counter, counterTotalLines, linesOfOneCard, totalLines);
-
-    //Comprobar si el numero random coincide
-    if (bingoCard[i].number === randomNumber) {
-      bingoCard[i].matched = true;
-      bingoCard[i].number = "X";
-    }
+  bingoCard.forEach((card) => {
+    if (card.matched && card.number == "X") counterTotalLines++;
+  });
+  if (counterTotalLines >= totalLines) {
+    console.clear();
+    showBingoCard();
+    alert("Bingo");
+    finishGame = true;
   }
-}
+};
 
-function checkLines(i, counter, counterTotalLines, linesOfOneCard, totalLines) {
-  if (bingoCard[i].matched == true) {
-    counter++;
-    counterTotalLines++;
-    //Comprobar si una linea esta completa
-    if (counter === linesOfOneCard) {
-      alert("Linea completa");
-    }
-
-    //Comprobar si he ganado
-    if (counterTotalLines === totalLines) {
-      alert("Bingo");
-      finishGame = true;
-    }
-  } else {
-    counter = 0;
-  }
-}
-
-function askRandomCards() {
+const askRandomCards = () => {
   console.clear();
   setRandomNumbers();
   showBingoCard();
@@ -102,11 +107,32 @@ function askRandomCards() {
   if (answer == "no") {
     askRandomCards();
   }
-}
-function setRandomNumbers() {
-  bingoCard.forEach((card) => {
-    card.number = getRandomNumber(20);
-    card.matched = false;
-  });
-}
+};
+const setRandomNumbers = () => {
+  const randomNumbers = generateRandomNumbers(bingoCard.length);
+  for (let i = 0; i < randomNumbers.length; i++) {
+    const card = bingoCard[i];
+    card.number = randomNumbers[i];
+  }
+};
+const generateRandomNumbers = (amountRandomNumbers) => {
+  const randomNumbers = [];
+  while (randomNumbers.length < amountRandomNumbers) {
+    let randomNumber = getRandomNumber(amountRandomNumbers);
+    let existNumber = false;
+    randomNumbers.forEach((randNum) => {
+      if (randNum === randomNumber) {
+        existNumber = true;
+      }
+    });
+
+    if (!existNumber) {
+      randomNumbers.push(randomNumber);
+    }
+  }
+  return randomNumbers;
+};
+
+const getRandomNumber = (max) => Math.floor(Math.random() * max) + 1;
+
 bingo();
