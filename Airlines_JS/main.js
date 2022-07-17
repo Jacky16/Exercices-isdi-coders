@@ -15,6 +15,7 @@ let flights = [
 let nameOfUser = "";
 let isAdmin = false;
 let exit = false;
+
 const averageCost = () => {
   let sum = 0;
   let counter = 0;
@@ -28,7 +29,7 @@ const averageCost = () => {
     "El coste media de los vuelos es: " + (sum / counter).toFixed(2) + "€"
   );
 };
-function showFlights(_flights) {
+const showFlights = (_flights) => {
   _flights.forEach((flight) => {
     let stringToShow =
       "ID: " +
@@ -49,16 +50,18 @@ function showFlights(_flights) {
 
     console.log(stringToShow);
   });
-}
-function askName() {
+};
+const askName = () => {
   nameOfUser = prompt("Cual es tu nombre?");
-  if (nameOfUser == null) {
+  if (nameOfUser == "") {
     askName();
+  } else if (nameOfUser == null) {
+    exit = true;
   }
   console.log("Hola " + nameOfUser);
   console.log("------------------------------");
-}
-function askAdmin() {
+};
+const askAdmin = () => {
   adminAnswer = prompt("¿Eres administrador? (si/no)");
   if (adminAnswer == "si") {
     isAdmin = true;
@@ -66,13 +69,15 @@ function askAdmin() {
   } else if (adminAnswer == "no") {
     isAdmin = false;
     return;
-  } else {
+  } else if (adminAnswer == "") {
     console.clear();
     console.log("Ingrese una respuesta valida");
     askAdmin();
+  } else {
+    exit = true;
   }
-}
-function createFlight() {
+};
+const createFlight = () => {
   if (flights.length > 15) {
     alert("Solo se pueden añadir 15 vuelos");
     return;
@@ -90,12 +95,16 @@ function createFlight() {
   };
   flights.push(newFlight);
   alert("Vuelo añadido");
-}
+};
 const showPricesFlights = () => {
   const sourceFlight = prompt("Introduce el origen del vuelo");
   const destinationFlight = prompt("Introduce el destino del vuelo");
 
   let costFlight = prompt("Introduce el coste del vuelo");
+  if (sourceFlight == null || destinationFlight == null || costFlight == null) {
+    exit = true;
+    return;
+  }
   while (!Number(costFlight)) {
     console.log("Introduce un numero");
     costFlight = prompt("Introduce el coste del vuelo");
@@ -108,11 +117,16 @@ const showPricesFlights = () => {
   }
   return { sourceFlight, destinationFlight, costFlight, scaleFlight };
 };
-function deleteFlight() {
+const deleteFlight = () => {
   console.clear();
   showFlights(flights);
   const idFlight = prompt("Introduce el id del vuelo que quieres eliminar");
+  if (idFlight == null) {
+    exit = true;
+    return;
+  }
   const id = Number(idFlight);
+
   if (Number.isInteger(id)) {
     const flightToDelele = flights.find((flight) => flight.id === id);
     if (flightToDelele != null) {
@@ -126,29 +140,27 @@ function deleteFlight() {
     alert("El id introducido no es valido");
     deleteFlight();
   }
-}
-
-function askerManager() {
+};
+const askerManager = () => {
   if (isAdmin) {
     adminQuestions();
   } else {
     const answer = prompt("¿Que quieres hacer? (comprar)(salir)");
-    if (answer == "salir") {
+    if (answer == "salir" || answer == null) {
       exit = true;
       console.clear();
       console.log("Hasta pronto " + nameOfUser);
     } else if (answer == "comprar") {
       console.clear();
       buyFlight();
-    } else {
+    } else if (answer == "") {
       console.clear();
       console.log("Ingrese una respuesta valida");
       askerManager();
     }
   }
-}
-
-function buyFlight() {
+};
+const buyFlight = () => {
   showFlights(flights);
   const questionPrice =
     "Introduce un precio para separar los vuelos por precio de mayor y menor al precio introducido";
@@ -187,29 +199,30 @@ function buyFlight() {
     alert("El id introducido no es valido");
     buyFlight();
   }
-}
-
-function adminQuestions() {
+};
+const adminQuestions = () => {
   const answer = prompt("¿Que quieres hacer? (crear/eliminar/salir)");
-  if (answer == "crear") {
-    createFlight();
-  } else if (answer == "eliminar") {
-    deleteFlight();
-  } else if (answer == "salir") {
+  if (answer == "salir" || answer == null) {
     exit = true;
     console.clear();
     console.log("Hasta pronto " + nameOfUser);
-  } else {
+  } else if (answer == "crear") {
+    createFlight();
+  } else if (answer == "eliminar") {
+    deleteFlight();
+  } else if (answer == "") {
     console.clear();
     console.log("Ingrese una respuesta valida");
     askerManager();
   }
-}
+};
 
 //Main
-function main() {
+const main = () => {
   askName();
+  if (exit) return;
   askAdmin();
+  if (exit) return;
   averageCost();
 
   while (!exit) {
@@ -218,5 +231,5 @@ function main() {
     averageCost();
     askerManager();
   }
-}
+};
 main();
