@@ -78,7 +78,7 @@ const askAdmin = () => {
   }
 };
 const createFlight = () => {
-  if (flights.length > 15) {
+  if (flights.length >= 15) {
     alert("Solo se pueden añadir 15 vuelos");
     return;
   }
@@ -163,10 +163,9 @@ const askerManager = () => {
 const buyFlight = () => {
   showFlights(flights);
   const questionPrice =
-    "Introduce un precio para separar los vuelos por precio de mayor y menor al precio introducido";
+    "¿Cuánto te quieres gastas?//Introduce el saldo máximo disponible.";
   let inputPrice = prompt(questionPrice);
   numOrder = Number.parseFloat(inputPrice);
-  debugger;
   while (!Number(numOrder) || inputPrice === null) {
     inputPrice = prompt(questionPrice);
   }
