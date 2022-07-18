@@ -49,7 +49,9 @@ const showResults = () => {
   });
 };
 const askUserNumbers = () => {
-  const inputNumber = prompt("Ingrese un número");
+  const inputNumber = prompt(
+    "Ingrese un número y haz click en 'Aceptar' para añadirlo // Pulse aceptar con el campo vacio para calcular // Si introduce un numero, se calculará la raiz cuadrada"
+  );
 
   if (Number(inputNumber) != isNaN && inputNumber != "") {
     inputsUser.push(Number(inputNumber));
@@ -74,7 +76,7 @@ const askAgain = () => {
 const calculate = () => {
   const sizeInputs = inputsUser.length;
   if (sizeInputs === 1) {
-    const sqrtResult = Math.sqrt(inputsUser[0]);
+    const sqrtResult = Math.sqrt(inputsUser[0]).toFixed(3);
     const result = { sqrt: sqrtResult };
     results.push(result);
     showResults();
