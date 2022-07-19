@@ -19,17 +19,27 @@ const bingoCard = [
 ];
 
 let isFinishGame = false;
+let isLine = false;
 let namePlayer;
 let turn = 0;
+let score = 0;
 const rangeMaxRandNums = 90;
 const maxNumBombo = 90;
 let indexNumBombo = 0;
 let numsInBombo = [];
+const rankingScore = [];
+const points = {
+  byTurn: 2,
+  byNumber: 5,
+  byLine: 10,
+  byBingo: 20,
+};
 
 const bingo = () => {
   askName();
-  setBomboNumbers();
   alert(`Bienvenido ${namePlayer}`);
+  showSystemPoints();
+  setBomboNumbers();
   askRandomCards();
 
   while (!isFinishGame) {
@@ -44,8 +54,51 @@ const askName = () => {
 const finishGame = () => {
   showBingoCard();
   isFinishGame = true;
-  alert(`${namePlayer}lo has completado en ${turn} turnos`);
+  alert(`${namePlayer} lo has completado en ${turn} turnos`);
+  alert(`Has conseguido ${score} puntos`);
   turn = 0;
+  const player = {
+    name: namePlayer,
+    points: score,
+  };
+  rankingScore.push(player);
+  showRankings();
+  askPlayAgain();
+};
+const showSystemPoints = () => {
+  let messg = "Sistema de puntos: ";
+  messg += "\n";
+  messg += `Por cada turno, se restan ${points.byTurn} puntos`;
+  messg += "\n";
+  messg += `Por cada numero que se acierta, se suman ${points.byNumber} puntos`;
+  messg += "\n";
+  messg += `Por cada linea, se suman ${points.byLine} puntos`;
+  messg += "\n";
+  messg += `Si haces Bingo, se suman ${points.byBingo} puntos`;
+  alert(messg);
+};
+const askPlayAgain = () => {
+  let answer = prompt("Quieres jugar de nuevo? (si/no)");
+
+  if (answer == null || answer.toLowerCase() == "no") {
+    alert("Gracias por jugar " + namePlayer);
+    return;
+  } else if (answer.toLowerCase() != "si" && answer.toLowerCase() != "no") {
+    askPlayAgain();
+  } else if (answer.toLocaleLowerCase == "si") {
+    resetGame();
+    bingo();
+  }
+};
+const showRankings = () => {
+  let messg = "Ranking: ";
+  messg += "\n";
+  rankingScore.sort((a, b) => b.points - a.points);
+  rankingScore.forEach((player, index) => {
+    messg += `${index + 1}. ${player.name} - ${player.points} puntos`;
+    messg += "\n";
+  });
+  alert(messg);
 };
 const showBingoCard = () => {
   console.clear();
@@ -67,6 +120,7 @@ const askNewTurn = () => {
     checkNumber(randomNumber);
     showBingoCard();
     turn++;
+    subScore(points.byTurn);
   } else {
     isFinishGame = true;
   }
@@ -82,6 +136,7 @@ const checkNumber = (randomNumber) => {
 
     if (currentCard.number === randomNumber) {
       currentCard.number = "X";
+      addScore(points.byNumber);
     }
     if (counter >= 5) {
       counter = 0;
@@ -100,9 +155,12 @@ const checkNumber = (randomNumber) => {
 
           if (checkBingo()) {
             alert("Bingo");
+            addScore(points.byBingo);
             finishGame();
-          } else {
+          } else if (!isLine) {
             alert("Linea");
+            isLine = true;
+            addScore(points.byLine);
           }
 
           counterMatches = 0;
@@ -139,10 +197,10 @@ const askRandomCards = () => {
 };
 const setRandomNumbers = () => {
   const randomNumbers = generateRandomNumbers(90);
-  for (let i = 0; i < bingoCard.length; i++) {
-    const card = bingoCard[i];
-    card.number = randomNumbers[i];
-  }
+  bingoCard.forEach((card, index) => {
+    card.number = randomNumbers[index];
+    card.matched = false;
+  });
 };
 const generateRandomNumbers = (amountRandomNumbers) => {
   const randomNumbers = [];
@@ -175,5 +233,20 @@ const getBomboNumber = () => {
   }
   return randNum;
 };
-
+const subScore = (value) => {
+  score -= value;
+  if (score <= 0) {
+    score = 0;
+  }
+};
+const addScore = (value) => {
+  score += value;
+};
+const resetGame = () => {
+  score = 0;
+  turn = 0;
+  isLine = false;
+  isFinishGame = false;
+  namePlayer = "";
+};
 bingo();
