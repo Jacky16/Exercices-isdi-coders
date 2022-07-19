@@ -85,7 +85,7 @@ const askPlayAgain = () => {
     return;
   } else if (answer.toLowerCase() != "si" && answer.toLowerCase() != "no") {
     askPlayAgain();
-  } else if (answer.toLocaleLowerCase == "si") {
+  } else if (answer.toLowerCase() == "si") {
     resetGame();
     bingo();
   }
